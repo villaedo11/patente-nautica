@@ -14,6 +14,19 @@ Tre modalità:
 Statistiche e storico restano in `localStorage`: nessun account, nessun
 database, nessun dato che lascia il telefono.
 
+## Uso senza rete
+
+Il sito è installabile come app (Aggiungi a schermata Home). Alla prima
+apertura un service worker scarica le domande e tutte le figure — circa
+1,4 MB — così dopo si studia anche senza campo. Le pagine invece si
+ricaricano sempre dalla rete quando c'è, per non restare indietro di un
+deploy.
+
+> Il service worker **non è stato verificato su un browser reale**: il
+> browser integrato dell'ambiente di sviluppo non supporta i service worker
+> (nemmeno uno vuoto). Al primo deploy conviene controllare da telefono che
+> `pn-v1-contenuti` compaia nella cache e che la modalità aereo funzioni.
+
 ## Rigenerare il database dal PDF
 
 I dati sono committati, quindi per sviluppare non serve il PDF. Serve solo se

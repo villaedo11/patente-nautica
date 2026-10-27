@@ -291,6 +291,13 @@ def main() -> int:
     (DATA / "taxonomy.json").write_text(
         json.dumps(taxonomy, ensure_ascii=False, indent=2), encoding="utf-8")
 
+    # Elenco delle figure: lo legge il service worker per metterle in cache
+    # tutte insieme e far funzionare l'app senza rete.
+    (PUBDATA / "figure.json").write_text(
+        json.dumps(sorted(f.name for f in FIGDIR.glob("*.webp")),
+                   ensure_ascii=False),
+        encoding="utf-8")
+
     size = (PUBDATA / "questions.json").stat().st_size / 1024
     print(f"ok: public/data/questions.json ({size:.0f} KB), {len(taxonomy)} temi")
     for t in taxonomy:

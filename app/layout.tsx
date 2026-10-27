@@ -5,6 +5,7 @@ import {
   IBM_Plex_Serif,
   IBM_Plex_Mono,
 } from "next/font/google"
+import Offline from "@/components/Offline"
 import "./globals.css"
 
 const sans = IBM_Plex_Sans({
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${sans.variable} ${cond.variable} ${serif.variable} ${mono.variable} min-h-dvh antialiased`}
       >
         {children}
+        <Offline />
       </body>
     </html>
   )
