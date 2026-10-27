@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
 import type { Item, Mode } from "./types"
 
 const CHIAVE = "pn.v1"
@@ -26,8 +26,24 @@ export type Progressi = {
 
 const VUOTO: Progressi = { schede: {}, sessioni: [] }
 
+/** Snapshot memorizzato: useSyncExternalStore richiede che fra una modifica
+ *  e l'altra l'oggetto resti lo stesso, altrimenti rirenderizza all'infinito. */
+let cache: Progressi | null = null
+const ascoltatori = new Set<() => void>()
+
+function invalida(): void {
+  cache = null
+  for (const f of ascoltatori) f()
+}
+
 function leggi(): Progressi {
   if (typeof window === "undefined") return VUOTO
+  if (cache) return cache
+  cache = analizza()
+  return cache
+}
+
+function analizza(): Progressi {
   try {
     const raw = window.localStorage.getItem(CHIAVE)
     if (!raw) return VUOTO
@@ -46,24 +62,35 @@ function scrivi(p: Progressi): void {
   } catch {
     /* quota piena o storage negato: l'esercitazione continua comunque */
   }
+  invalida()
 }
 
-export function registraSessione(items: Item[], modo: Mode, secondi: number): void {
+/** Registra l'esito di una singola domanda. In allenamento e ripasso si
+ *  chiama al tocco, perche' li' la risposta e' definitiva: cosi' una sessione
+ *  interrotta a meta' non va persa. In esame si chiama solo alla consegna,
+ *  perche' fino ad allora la risposta si puo' ancora cambiare. */
+export function registraRisposta(id: string, giusta: boolean): void {
   const p = leggi()
-  let giuste = 0
-  for (const it of items) {
-    const id = it.question.id
-    const s = p.schede[id] ?? { viste: 0, errori: 0, aperta: false }
-    s.viste++
-    if (it.given !== null && it.given === it.correct) {
-      giuste++
-      s.aperta = false // recuperata
-    } else {
-      s.errori++
-      s.aperta = true
-    }
-    p.schede[id] = s
+  const s = p.schede[id] ?? { viste: 0, errori: 0, aperta: false }
+  s.viste++
+  if (giusta) s.aperta = false // recuperata
+  else {
+    s.errori++
+    s.aperta = true
   }
+  p.schede[id] = s
+  scrivi(p)
+}
+
+export function chiudiSessione(items: Item[], modo: Mode, secondi: number): void {
+  // In esame il conteggio per domanda si fa adesso, tutto insieme.
+  if (modo === "esame") {
+    for (const it of items) {
+      registraRisposta(it.question.id, it.given !== null && it.given === it.correct)
+    }
+  }
+  const p = leggi()
+  const giuste = items.filter((it) => it.given !== null && it.given === it.correct).length
   p.sessioni.unshift({
     t: new Date().toISOString().slice(0, 16),
     modo,
@@ -81,15 +108,28 @@ export function azzera(): void {
   } catch {
     /* niente da azzerare */
   }
+  invalida()
 }
 
-/** Legge i progressi dopo il montaggio: il server non ha localStorage, quindi
- *  il primo render deve corrispondere a quello statico o l'idratazione rompe. */
-export function useProgressi(): [Progressi, () => void] {
-  const [p, setP] = useState<Progressi>(VUOTO)
-  const ricarica = useCallback(() => setP(leggi()), [])
-  useEffect(ricarica, [ricarica])
-  return [p, ricarica]
+function sottoscrivi(f: () => void): () => void {
+  ascoltatori.add(f)
+  // "storage" arriva solo dalle altre schede: tiene allineate due finestre
+  // aperte sullo stesso ripasso.
+  const esterno = (e: StorageEvent) => {
+    if (e.key === CHIAVE || e.key === null) invalida()
+  }
+  window.addEventListener("storage", esterno)
+  return () => {
+    ascoltatori.delete(f)
+    window.removeEventListener("storage", esterno)
+  }
+}
+
+/** I progressi stanno in localStorage, che per React e' una sorgente esterna:
+ *  useSyncExternalStore evita il setState dentro un effect e fa combaciare il
+ *  primo render con l'HTML statico (il server non ha localStorage). */
+export function useProgressi(): Progressi {
+  return useSyncExternalStore(sottoscrivi, leggi, () => VUOTO)
 }
 
 export function idAperti(p: Progressi): string[] {

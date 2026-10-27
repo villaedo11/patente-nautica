@@ -33,7 +33,7 @@ function Barra({ valore }: { valore: number | null }) {
 
 export default function Statistiche() {
   const { stato, domande, errore } = useQuestions()
-  const [progressi, ricarica] = useProgressi()
+  const progressi = useProgressi()
   const [aperto, setAperto] = useState<string | null>(null)
 
   const { perTema, perVoce, totale } = useMemo(() => {
@@ -188,7 +188,7 @@ export default function Statistiche() {
             onClick={() => {
               if (confirm("Cancello statistiche, sessioni ed errori in sospeso?")) {
                 azzera()
-                ricarica()
+
               }
             }}
             className="titolo mt-10 border border-sinistra px-4 py-2.5 text-sm text-sinistra"

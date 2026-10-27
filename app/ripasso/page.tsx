@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useCallback, useEffect, useState } from "react"
+import { useMemo, useState } from "react"
 import Runner from "@/components/Runner"
 import { Caricamento, Errore } from "@/components/Stato"
 import { useQuestions } from "@/lib/data"
@@ -14,36 +14,35 @@ const MAX_PER_GIRO = 25
 
 export default function Ripasso() {
   const { stato, domande, errore } = useQuestions()
-  const [progressi, ricaricaProgressi] = useProgressi()
+  const progressi = useProgressi()
   const [items, setItems] = useState<Item[] | null>(null)
-  const [pronto, setPronto] = useState(false)
 
-  const prepara = useCallback(() => {
-    if (!domande) return
-    const aperti = new Set(idAperti(progressi))
-    const pool = domande.filter((q) => aperti.has(q.id))
-    setItems(pick(pool, Math.min(MAX_PER_GIRO, pool.length)).map(toItem))
-    setPronto(true)
+  const aperte = useMemo(() => {
+    if (!domande) return []
+    const apertiSet = new Set(idAperti(progressi))
+    return domande.filter((q) => apertiSet.has(q.id))
   }, [domande, progressi])
 
-  useEffect(prepara, [prepara])
-
-  const ricomincia = useCallback(() => {
-    ricaricaProgressi()
-    setItems(null)
-    setPronto(false)
-  }, [ricaricaProgressi])
-
   if (stato === "errore") return <Errore messaggio={errore} />
-  if (!pronto || !items) return <Caricamento cosa="i tuoi errori" />
+  if (stato === "carico") return <Caricamento cosa="i tuoi errori" />
 
-  if (items.length === 0) {
+  if (items) {
+    return (
+      <Runner
+        iniziali={items}
+        modo="ripasso"
+        onRicomincia={() => setItems(null)}
+      />
+    )
+  }
+
+  if (aperte.length === 0) {
     return (
       <div className="mx-auto w-full max-w-xl px-4 py-20">
         <h1 className="titolo text-3xl">Nessun errore in sospeso</h1>
         <p className="mt-2 text-tenue">
-          Le domande sbagliate finiscono qui e ci restano finche&apos; non le
-          risolvi. Al momento non ce n&apos;e&apos; nessuna.
+          Le domande sbagliate finiscono qui e ci restano finché non le
+          risolvi. Al momento non ce n’è nessuna.
         </p>
         <Link
           href="/allenamento"
@@ -55,5 +54,27 @@ export default function Ripasso() {
     )
   }
 
-  return <Runner iniziali={items} modo="ripasso" onRicomincia={ricomincia} />
+  const quante = Math.min(MAX_PER_GIRO, aperte.length)
+
+  return (
+    <div className="mx-auto w-full max-w-xl px-4 pb-16 pt-10">
+      <Link href="/" className="text-sm text-tenue hover:text-inchiostro">
+        ← Esci
+      </Link>
+      <h1 className="titolo mt-2 text-3xl">Ripassa gli errori</h1>
+      <p className="mt-2 text-tenue">
+        <span className="tabular font-mono">{aperte.length}</span> domande
+        sbagliate e non ancora recuperate. Una domanda esce da questa lista
+        quando la risolvi.
+      </p>
+
+      <button
+        type="button"
+        onClick={() => setItems(pick(aperte, quante).map(toItem))}
+        className="titolo mt-8 w-full bg-inchiostro px-4 py-4 text-lg text-carta"
+      >
+        Ripassane <span className="tabular font-mono">{quante}</span>
+      </button>
+    </div>
+  )
 }

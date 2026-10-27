@@ -119,7 +119,7 @@ export default function Esito({
             })}
           </ul>
           <p className="mt-4 text-sm text-tenue">
-            Queste domande restano in &ldquo;Ripassa gli errori&rdquo; finche&apos; non le
+            Queste domande restano in &ldquo;Ripassa gli errori&rdquo; finché non le
             risolvi.
           </p>
         </section>

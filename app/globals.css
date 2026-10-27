@@ -13,6 +13,9 @@
   --inchiostro: #0f232d;   /* linework e testo */
   --inchiostro-tenue: #51707e;
   --magenta: #c2185b;      /* segnalamenti, aree regolamentate */
+  /* Il magenta chiaro del tema scuro e' troppo luminoso per il testo bianco
+     (contrasto 2.6): sopra ci va l'inchiostro. */
+  --su-magenta: #ffffff;
   --dritta: #0e7a3c;       /* verde di dritta: risposta esatta */
   --sinistra: #c2272d;     /* rosso di sinistra: risposta errata */
 }
@@ -26,6 +29,7 @@
     --inchiostro: #e3eff3;
     --inchiostro-tenue: #8fb0bd;
     --magenta: #ff6fa5;
+    --su-magenta: #081318;
     --dritta: #3fbd72;
     --sinistra: #ff7b72;
   }
@@ -39,6 +43,7 @@
   --color-inchiostro: var(--inchiostro);
   --color-tenue: var(--inchiostro-tenue);
   --color-magenta: var(--magenta);
+  --color-su-magenta: var(--su-magenta);
   --color-dritta: var(--dritta);
   --color-sinistra: var(--sinistra);
 

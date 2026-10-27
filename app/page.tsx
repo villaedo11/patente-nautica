@@ -14,7 +14,7 @@ import {
 const TOTALE = taxonomy.reduce((s, t) => s + t.n, 0)
 
 export default function Home() {
-  const [progressi] = useProgressi()
+  const progressi = useProgressi()
   const aperti = idAperti(progressi)
   const viste = Object.keys(progressi.schede).length
 
@@ -62,7 +62,7 @@ export default function Home() {
         <div className="border-t border-secca p-4">
           <Link
             href="/esame"
-            className="titolo block bg-magenta px-4 py-3.5 text-center text-lg text-white"
+            className="titolo block bg-magenta px-4 py-3.5 text-center text-lg text-su-magenta"
           >
             Inizia la simulazione
           </Link>

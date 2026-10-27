@@ -1,11 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Figura from "./Figura"
 import ScalaLatitudini from "./ScalaLatitudini"
 import Esito from "./Esito"
-import { registraSessione } from "@/lib/progress"
+import { chiudiSessione, registraRisposta } from "@/lib/progress"
 import { ERRORI_AMMESSI, MINUTI_ESAME, formatTempo, siglaTema } from "@/lib/quiz"
 import type { Item, Mode } from "@/lib/types"
 
@@ -22,34 +22,38 @@ export default function Runner({
   const esame = modo === "esame"
   const [items, setItems] = useState<Item[]>(iniziali)
   const [i, setI] = useState(0)
-  const [finito, setFinito] = useState(false)
+  const [consegnato, setConsegnato] = useState(false)
   const [restano, setRestano] = useState(MINUTI_ESAME * 60)
-  const inizio = useRef(Date.now())
+  const inizio = useRef(0)
+  const registrato = useRef(false)
   const testa = useRef<HTMLDivElement>(null)
 
+  // Allo scadere del tempo la prova si chiude da sola con le risposte date
+  // fino a quel momento, come in commissione. Lo stato "finita" si ricava,
+  // non si pilota: cosi' il timer non deve far scattare un altro render.
+  const finito = consegnato || (esame && restano <= 0)
   const item = items[i]
   const rivelato = !esame && item.given !== null
   const ultima = i === items.length - 1
 
-  const concludi = useCallback(
-    (finali: Item[]) => {
-      setItems(finali)
-      setFinito(true)
-      registraSessione(finali, modo, (Date.now() - inizio.current) / 1000)
-    },
-    [modo],
-  )
+  // Il cronometro della sessione parte al montaggio, non durante il render.
+  useEffect(() => {
+    inizio.current = Date.now()
+  }, [])
 
-  // Il tempo scorre solo in esame e solo finche' la prova e' aperta.
   useEffect(() => {
     if (!esame || finito) return
     const t = setInterval(() => setRestano((s) => s - 1), 1000)
     return () => clearInterval(t)
   }, [esame, finito])
 
+  // La sessione si archivia una volta sola, qualunque sia il motivo per cui
+  // e' finita.
   useEffect(() => {
-    if (esame && !finito && restano <= 0) concludi(items)
-  }, [esame, finito, restano, items, concludi])
+    if (!finito || registrato.current) return
+    registrato.current = true
+    chiudiSessione(items, modo, (Date.now() - inizio.current) / 1000)
+  }, [finito, items, modo])
 
   // Cambiando domanda si torna in cima: il testo lungo lascia la pagina
   // scrollata a meta' e la domanda nuova parte invisibile.
@@ -62,10 +66,13 @@ export default function Runner({
     setItems((prev) =>
       prev.map((it, k) => (k === i ? { ...it, given: scelta } : it)),
     )
+    // Fuori dall'esame si salva subito: uscire a meta' sessione non deve
+    // buttare via le domande gia' fatte.
+    if (!esame) registraRisposta(item.question.id, scelta === item.correct)
   }
 
   function avanti() {
-    if (ultima) concludi(items)
+    if (ultima) setConsegnato(true)
     else setI(i + 1)
   }
 
@@ -176,7 +183,7 @@ export default function Runner({
               <span className="text-dritta">Esatto.</span>
             ) : (
               <span className="text-sinistra">
-                Sbagliata. La risposta esatta e&apos; evidenziata in verde.
+                Sbagliata. La risposta esatta è evidenziata in verde.
               </span>
             )}{" "}
             <span className="etichetta-carta">{item.question.voce}</span>
@@ -200,8 +207,8 @@ export default function Runner({
           {esame && ultima ? (
             <button
               type="button"
-              onClick={() => concludi(items)}
-              className="titolo flex-1 bg-magenta px-4 py-3 text-base text-white"
+              onClick={() => setConsegnato(true)}
+              className="titolo flex-1 bg-magenta px-4 py-3 text-base text-su-magenta"
             >
               Consegna
               {senzaRisposta > 0 && (
