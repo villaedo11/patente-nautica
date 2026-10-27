@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Palette presa dalla carta nautica IIM: fondo acqua bassa, magenta dei
+   segnalamenti, verde di dritta e rosso di sinistra. Verde e rosso qui non
+   sono "giusto/sbagliato" generici: sono i colori dei fanali di bordo.
+   --------------------------------------------------------------------------- */
+:root {
+  --carta: #e8f1f4;        /* fondo pagina, azzurro della carta */
+  --foglio: #ffffff;       /* superficie delle schede */
+  --sabbia: #f6efe1;       /* terra emersa: il foglio d'esame */
+  --secca: #cadfe7;        /* filetti, tacche, bordi */
+  --inchiostro: #0f232d;   /* linework e testo */
+  --inchiostro-tenue: #51707e;
+  --magenta: #c2185b;      /* segnalamenti, aree regolamentate */
+  --dritta: #0e7a3c;       /* verde di dritta: risposta esatta */
+  --sinistra: #c2272d;     /* rosso di sinistra: risposta errata */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --carta: #081318;
+    --foglio: #0f232d;
+    --sabbia: #14272f;
+    --secca: #22414e;
+    --inchiostro: #e3eff3;
+    --inchiostro-tenue: #8fb0bd;
+    --magenta: #ff6fa5;
+    --dritta: #3fbd72;
+    --sinistra: #ff7b72;
+  }
+}
+
+@theme inline {
+  --color-carta: var(--carta);
+  --color-foglio: var(--foglio);
+  --color-sabbia: var(--sabbia);
+  --color-secca: var(--secca);
+  --color-inchiostro: var(--inchiostro);
+  --color-tenue: var(--inchiostro-tenue);
+  --color-magenta: var(--magenta);
+  --color-dritta: var(--dritta);
+  --color-sinistra: var(--sinistra);
+
+  --font-sans: var(--font-plex-sans);
+  --font-display: var(--font-plex-cond);
+  --font-carta: var(--font-plex-serif);
+  --font-mono: var(--font-plex-mono);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--carta);
+  color: var(--inchiostro);
+  font-family: var(--font-plex-sans), system-ui, sans-serif;
+  /* niente rimbalzo elastico sotto la barra fissa delle risposte */
+  overscroll-behavior-y: none;
+}
+
+/* Cifre a larghezza fissa ovunque compaiano numeri che cambiano:
+   timer, punteggi, contatori. Evita il tremolio. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Etichette cartografiche: sulla carta nautica i toponimi d'acqua sono in
+   corsivo serif. Qui marcano le sopra-righe. */
+.etichetta-carta {
+  font-family: var(--font-plex-serif), Georgia, serif;
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+.titolo {
+  font-family: var(--font-plex-cond), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Focus visibile e coerente con il magenta della carta. */
+:where(a, button, input, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--magenta);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Il lampo di un fanale alla conferma della risposta: un solo periodo,
+   non un lampeggio continuo. */
+@keyframes fanale {
+  0% { box-shadow: 0 0 0 0 currentColor; opacity: 1; }
+  60% { box-shadow: 0 0 0 10px transparent; opacity: 1; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+.fanale {
+  animation: fanale 620ms ease-out;
+}

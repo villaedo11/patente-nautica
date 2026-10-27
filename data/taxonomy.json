@@ -1,0 +1,230 @@
+[
+  {
+    "tema": "TEORIA DELLO SCAFO",
+    "n": 125,
+    "voci": [
+      {
+        "voce": "Effetti evolutivi dell'elica e del timone. Elementi di stabilità dell'unità.",
+        "n": 50
+      },
+      {
+        "voce": "Nomenclatura delle parti principali dello scafo",
+        "n": 75
+      }
+    ]
+  },
+  {
+    "tema": "MOTORI",
+    "n": 104,
+    "voci": [
+      {
+        "voce": "Calcolo dell'autonomia",
+        "n": 14
+      },
+      {
+        "voce": "Calcolo dell'autonomia in relazione alla potenza del motore ed alla quantità residua di carburante",
+        "n": 13
+      },
+      {
+        "voce": "Elementi di funzionamento dei sistemi di propulsione a motore",
+        "n": 48
+      },
+      {
+        "voce": "Irregolarità e piccole avarie che possono prevedere un intervento non specialistico",
+        "n": 19
+      },
+      {
+        "voce": "Irregolarità, piccole avarie e modo di rimediarvi",
+        "n": 10
+      }
+    ]
+  },
+  {
+    "tema": "SICUREZZA DELLA NAVIGAZIONE",
+    "n": 215,
+    "voci": [
+      {
+        "voce": "Centro Internazionale Radio Medico (CIRM).",
+        "n": 1
+      },
+      {
+        "voce": "Comunicazioni radiotelefoniche e relative procedure: assistenza e soccorso",
+        "n": 1
+      },
+      {
+        "voce": "Corretto uso degli apparati radio di bordo e chiamate di soccorso",
+        "n": 29
+      },
+      {
+        "voce": "Dotazioni di sicurezza e mezzi di salvataggio",
+        "n": 48
+      },
+      {
+        "voce": "Precauzioni da adottare in caso di navigazione con tempo cattivo",
+        "n": 25
+      },
+      {
+        "voce": "Prevenzione degli incendi e uso degli estintori",
+        "n": 31
+      },
+      {
+        "voce": "Provvedimenti da adottare in caso di sinistro marittimo (incendio, collisione, falla, incaglio, uomo a mare)",
+        "n": 36
+      },
+      {
+        "voce": "Rischi derivanti dalla conduzione dell'unità sotto l'influenza di alcol o in stato di alterazione psico-fisica per l'uso di sostanze stupefacenti o psicotrope",
+        "n": 12
+      },
+      {
+        "voce": "Sinistro e abbandono dell'unità",
+        "n": 13
+      },
+      {
+        "voce": "Tipi di visite, loro periodicità e certificazioni",
+        "n": 19
+      }
+    ]
+  },
+  {
+    "tema": "MANOVRA E CONDOTTA",
+    "n": 155,
+    "voci": [
+      {
+        "voce": "Ancoraggio",
+        "n": 53
+      },
+      {
+        "voce": "Navigazione in prossimità della costa",
+        "n": 32
+      },
+      {
+        "voce": "Ormeggio e disormeggio",
+        "n": 49
+      },
+      {
+        "voce": "Precauzioni all'ingresso e all'uscita dei porti",
+        "n": 21
+      }
+    ]
+  },
+  {
+    "tema": "COLREG E SEGNALAMENTO MARITTIMO",
+    "n": 247,
+    "voci": [
+      {
+        "voce": "Fanali e segnali diurni",
+        "n": 67
+      },
+      {
+        "voce": "I principali fanali luminosi e il sistema IALA",
+        "n": 120
+      },
+      {
+        "voce": "Prevenire gli abbordi in mare",
+        "n": 60
+      }
+    ]
+  },
+  {
+    "tema": "METEOROLOGIA",
+    "n": 120,
+    "voci": [
+      {
+        "voce": "Bollettini meteorologici e previsioni locali",
+        "n": 53
+      },
+      {
+        "voce": "Elementi di meteorologia e strumenti",
+        "n": 46
+      },
+      {
+        "voce": "Venti",
+        "n": 21
+      }
+    ]
+  },
+  {
+    "tema": "NAVIGAZIONE CARTOGRAFICA ED ELETTRONICA",
+    "n": 322,
+    "voci": [
+      {
+        "voce": "Bussole magnetiche",
+        "n": 38
+      },
+      {
+        "voce": "Carte nautiche e proiezione di Mercatore",
+        "n": 56
+      },
+      {
+        "voce": "Coordinate geografiche",
+        "n": 45
+      },
+      {
+        "voce": "Elementi di navigazione costiera",
+        "n": 49
+      },
+      {
+        "voce": "Elementi di navigazione stimata: tempo, spazio e velocità",
+        "n": 72
+      },
+      {
+        "voce": "Navigazione elettronica",
+        "n": 13
+      },
+      {
+        "voce": "Orientamento e rosa dei venti",
+        "n": 11
+      },
+      {
+        "voce": "Prora e rotta, scarroccio e deriva per effetto del vento e della corrente",
+        "n": 30
+      },
+      {
+        "voce": "Pubblicazioni",
+        "n": 8
+      }
+    ]
+  },
+  {
+    "tema": "NORMATIVA DIPORTISTICA E AMBIENTALE",
+    "n": 184,
+    "voci": [
+      {
+        "voce": "Altro",
+        "n": 1
+      },
+      {
+        "voce": "Attività commerciale",
+        "n": 7
+      },
+      {
+        "voce": "Attvità commerciale",
+        "n": 1
+      },
+      {
+        "voce": "Comandante, conduttore, utilizzatore",
+        "n": 7
+      },
+      {
+        "voce": "Documenti",
+        "n": 11
+      },
+      {
+        "voce": "Leggi e regolamenti",
+        "n": 98
+      },
+      {
+        "voce": "Norme ambientali",
+        "n": 16
+      },
+      {
+        "voce": "Pesca",
+        "n": 17
+      },
+      {
+        "voce": "Sci nautico",
+        "n": 26
+      }
+    ]
+  }
+]
