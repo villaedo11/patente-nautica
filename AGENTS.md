@@ -10,5 +10,7 @@ Before any Next.js work, find and read the relevant doc in `node_modules/next/di
 
 I dati in `public/data/questions.json`, `data/taxonomy.json` e `public/figure/`
 sono **generati** da `scripts/extract_quiz.py`. Non modificarli a mano: correggi
-lo script e rilancialo. Le correzioni al PDF ufficiale vanno in `MANUAL_FIXES`,
+lo script e rilancialo.
+Le icone (`app/icon.png`, `app/apple-icon.png`, `app/favicon.ico`,
+`public/icon-*.png`) le genera `scripts/make_icons.py`. Le correzioni al PDF ufficiale vanno in `MANUAL_FIXES`,
 con la motivazione accanto. Vedi README.md.
