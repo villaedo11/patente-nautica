@@ -63,8 +63,9 @@ export default function ScalaLatitudini({
         })}
       </div>
 
-      {/* Tacche ogni 5 domande, come le etichette dei primi sul margine. */}
-      {!fitta && (
+      {/* Tacche ogni 5 domande, come le etichette dei primi sul margine.
+          Sotto le 5 domande non ce ne sarebbe nessuna: meglio niente riga. */}
+      {!fitta && items.length >= 5 && (
         <div className="mt-1 flex text-[10px] text-tenue tabular">
           {items.map((_, i) => (
             <span key={i} className="flex-1 text-center">

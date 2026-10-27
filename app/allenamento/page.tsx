@@ -9,7 +9,9 @@ import { useQuestions } from "@/lib/data"
 import { pick, siglaTema, toItem } from "@/lib/quiz"
 import type { Item } from "@/lib/types"
 
-const TAGLI = [10, 20, 40]
+/** Tagli brevi per ripassare una voce in un minuto, lunghi per sessioni vere.
+ *  Sopra i 20 c'e' "Tutte", che si adatta al filtro scelto. */
+const TAGLI = [1, 3, 5, 10, 15, 20]
 
 export default function Allenamento() {
   const { stato, domande, errore } = useQuestions()
@@ -79,6 +81,8 @@ export default function Allenamento() {
   if (stato === "carico") return <Caricamento />
 
   const massimo = pool.length
+  // Il taglio scelto puo' superare quello che i filtri attuali permettono.
+  const effettive = Math.min(quante, massimo)
 
   return (
     <div className="mx-auto w-full max-w-xl px-4 pb-36 pt-8">
@@ -174,7 +178,7 @@ export default function Allenamento() {
               type="button"
               onClick={() => setQuante(n)}
               aria-pressed={quante === n}
-              className={`tabular border px-4 py-2 font-mono text-sm ${
+              className={`tabular min-w-12 border px-4 py-3 font-mono text-sm ${
                 quante === n
                   ? "border-inchiostro bg-inchiostro text-carta"
                   : "border-secca bg-foglio"
@@ -187,7 +191,7 @@ export default function Allenamento() {
             type="button"
             onClick={() => setQuante(massimo)}
             aria-pressed={quante >= massimo}
-            className={`border px-4 py-2 text-sm ${
+            className={`border px-4 py-3 text-sm ${
               quante >= massimo
                 ? "border-inchiostro bg-inchiostro text-carta"
                 : "border-secca bg-foglio"
@@ -211,10 +215,8 @@ export default function Allenamento() {
             ) : (
               <>
                 Inizia con{" "}
-                <span className="tabular font-mono">
-                  {Math.min(quante, massimo)}
-                </span>{" "}
-                domande
+                <span className="tabular font-mono">{effettive}</span>{" "}
+                {effettive === 1 ? "domanda" : "domande"}
               </>
             )}
           </button>
